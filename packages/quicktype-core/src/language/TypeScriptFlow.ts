@@ -27,6 +27,11 @@ export const tsFlowOptions = Object.assign({}, javaScriptOptions, {
         "prefer-const-values",
         "Use string instead of enum for string enums with single value",
         false
+    ),
+    generateAdditionalPropertyAccess: new BooleanOption(
+        "generate-additional-property-access",
+        "Allows the generated type to have additional properties with an any type.",
+        true
     )
 });
 
@@ -173,7 +178,7 @@ export abstract class TypeScriptFlowBaseRenderer extends JavaScriptRenderer {
         });
 
         const additionalProperties = c.getAdditionalProperties();
-        if (additionalProperties) {
+        if (additionalProperties && this._tsFlowOptions.generateAdditionalPropertyAccess) {
             this.emitTable([["[property: string]", ": ", this.sourceFor(additionalProperties).source, ";"]]);
         }
     }
